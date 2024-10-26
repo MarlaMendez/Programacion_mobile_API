@@ -23,5 +23,42 @@ class ApiService {
 
   }
 
+// METODO PARA CREAR
+  Future<Post?> createPost(Post post) async {
+    final response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {"Content-Type":"application/json"},
+      body: jsonEncode(post.toMap()),
+    );
+    if (response.statusCode == 201) {
+      print("Dado criado com sucesso");
+      return Post.fromMap(jsonDecode(response.body));
+    }
+    return null;
+  }
+
+// METODO PARA ACTUALIZAR.
+  Future<Post?> updatePost(Post post, int id) async{
+    final response = await http.put(
+      Uri.parse('$baseUrl/$id'),
+      headers: {"Content-Type":"application/json"},
+      body: jsonEncode(post.toMap())
+    );
+    if(response.statusCode == 200){
+      print("Dado atualizado com sucesso");
+      return Post.fromMap(jsonDecode(response.body));
+    }
+    return null;
+  }
+
+// METODO PARA ELIMINAR
+  Future<void> deletePost(int id) async{
+    final response = await http.delete(Uri.parse('$baseUrl/$id'));
+
+    if(response.statusCode == 200){
+      print("Dato eliminado con exito");
+    }
+  }
+
 
 }
